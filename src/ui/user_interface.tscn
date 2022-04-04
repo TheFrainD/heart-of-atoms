@@ -1,0 +1,243 @@
+[gd_scene load_steps=15 format=2]
+
+[ext_resource path="res://src/ui/ui_theme.tres" type="Theme" id=1]
+[ext_resource path="res://assets/ui/progressbar_bg.png" type="Texture" id=2]
+[ext_resource path="res://assets/ui/progressbar_fg.png" type="Texture" id=3]
+[ext_resource path="res://src/ui/user_interface.gd" type="Script" id=4]
+[ext_resource path="res://assets/fonts/kongtext.ttf" type="DynamicFontData" id=5]
+[ext_resource path="res://src/ui/temp_bar.gd" type="Script" id=6]
+[ext_resource path="res://assets/objects/cooling_element.png" type="Texture" id=7]
+[ext_resource path="res://src/main/change_scene_button.gd" type="Script" id=8]
+[ext_resource path="res://src/main/exit_button.gd" type="Script" id=9]
+[ext_resource path="res://assets/sfx/explosion.wav" type="AudioStream" id=10]
+
+[sub_resource type="DynamicFont" id=1]
+size = 4
+font_data = ExtResource( 5 )
+
+[sub_resource type="Animation" id=3]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("ExplosionOverlay:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("ExplosionOverlay:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "explode"
+length = 0.6
+tracks/0/type = "value"
+tracks/0/path = NodePath("ExplosionOverlay:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.6 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/1/type = "audio"
+tracks/1/path = NodePath("AudioStreamPlayer")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"clips": [ {
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource( 10 )
+} ],
+"times": PoolRealArray( 0 )
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("ExplosionOverlay:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.6 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+
+[sub_resource type="DynamicFont" id=2]
+size = 8
+font_data = ExtResource( 5 )
+
+[node name="UserInterface" type="Control"]
+pause_mode = 2
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+script = ExtResource( 4 )
+
+[node name="Health" type="Control" parent="."]
+margin_right = 93.0
+margin_bottom = 24.0
+
+[node name="HealthLabel" type="Label" parent="Health"]
+margin_left = 2.0
+margin_top = 5.0
+margin_right = 18.0
+margin_bottom = 14.0
+text = "HP"
+align = 1
+valign = 1
+
+[node name="HealthBar" type="TextureProgress" parent="Health"]
+margin_left = 21.0
+margin_top = 4.0
+margin_right = 53.0
+margin_bottom = 9.0
+rect_scale = Vector2( 2, 2 )
+value = 30.0
+texture_under = ExtResource( 2 )
+texture_progress = ExtResource( 3 )
+tint_progress = Color( 0.956863, 0.278431, 0.278431, 1 )
+
+[node name="Core" type="Control" parent="."]
+margin_top = 18.0
+margin_right = 87.0
+margin_bottom = 32.0
+
+[node name="Degree" type="Label" parent="Core"]
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 7.0
+margin_bottom = 7.0
+custom_fonts/font = SubResource( 1 )
+text = "O"
+
+[node name="TempLabel" type="Label" parent="Core"]
+margin_left = 7.0
+margin_top = 1.0
+margin_right = 16.0
+margin_bottom = 9.0
+text = "C"
+
+[node name="TempBar" type="TextureProgress" parent="Core"]
+margin_left = 21.0
+margin_top = 1.0
+margin_right = 53.0
+margin_bottom = 6.0
+rect_scale = Vector2( 2, 2 )
+max_value = 1000.0
+value = 250.0
+texture_under = ExtResource( 2 )
+texture_progress = ExtResource( 3 )
+tint_progress = Color( 0.956863, 0.278431, 0.278431, 1 )
+script = ExtResource( 6 )
+
+[node name="Coolers" type="Control" parent="."]
+margin_top = 31.0
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="CoolerIcon" type="TextureRect" parent="Coolers"]
+margin_left = 3.0
+margin_right = 11.0
+margin_bottom = 8.0
+texture = ExtResource( 7 )
+
+[node name="CoolerCounter" type="Label" parent="Coolers"]
+margin_left = 15.0
+margin_right = 33.0
+margin_bottom = 8.0
+text = "5"
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 10 )
+volume_db = 5.0
+pitch_scale = 0.37
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/RESET = SubResource( 3 )
+anims/explode = SubResource( 4 )
+
+[node name="ExplosionOverlay" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 1, 1, 1, 0 )
+
+[node name="PauseMenu" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+color = Color( 0, 0, 0, 0.27451 )
+
+[node name="Label" type="Label" parent="PauseMenu"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -35.0
+margin_top = 42.0
+margin_right = 35.0
+margin_bottom = 56.0
+custom_colors/font_color = Color( 0.721191, 0.763046, 0.824219, 1 )
+text = "Paused"
+align = 1
+
+[node name="Menu" type="VBoxContainer" parent="PauseMenu"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -38.0
+margin_top = 63.0
+margin_right = 38.0
+margin_bottom = 110.0
+
+[node name="Retry" type="Button" parent="PauseMenu/Menu"]
+margin_right = 76.0
+margin_bottom = 13.0
+size_flags_vertical = 3
+custom_fonts/font = SubResource( 2 )
+text = "Retry"
+script = ExtResource( 8 )
+next_scene_path = "res://src/main/game.tscn"
+
+[node name="MainMenu" type="Button" parent="PauseMenu/Menu"]
+margin_top = 17.0
+margin_right = 76.0
+margin_bottom = 30.0
+size_flags_vertical = 3
+custom_fonts/font = SubResource( 2 )
+text = "Main Menu"
+script = ExtResource( 8 )
+next_scene_path = "res://src/main/main_menu.tscn"
+
+[node name="Exit" type="Button" parent="PauseMenu/Menu"]
+margin_top = 34.0
+margin_right = 76.0
+margin_bottom = 47.0
+size_flags_vertical = 3
+custom_fonts/font = SubResource( 2 )
+text = "Exit"
+script = ExtResource( 9 )
+
+[connection signal="button_up" from="PauseMenu/Menu/Retry" to="PauseMenu/Menu/Retry" method="_on_button_up"]
+[connection signal="button_up" from="PauseMenu/Menu/MainMenu" to="PauseMenu/Menu/MainMenu" method="_on_button_up"]
+[connection signal="button_up" from="PauseMenu/Menu/Exit" to="PauseMenu/Menu/Exit" method="_on_button_up"]

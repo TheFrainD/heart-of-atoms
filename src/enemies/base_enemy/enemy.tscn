@@ -1,0 +1,397 @@
+[gd_scene load_steps=40 format=2]
+
+[ext_resource path="res://src/main/state_machine/state_machine.gd" type="Script" id=1]
+[ext_resource path="res://assets/enemies/chmonya_spritesheet.png" type="Texture" id=2]
+[ext_resource path="res://src/enemies/base_enemy/state/move.gd" type="Script" id=3]
+[ext_resource path="res://src/enemies/base_enemy/state/walk.gd" type="Script" id=4]
+[ext_resource path="res://src/enemies/base_enemy/state/air.gd" type="Script" id=5]
+[ext_resource path="res://src/enemies/base_enemy/enemy.gd" type="Script" id=6]
+[ext_resource path="res://src/player/bullet_emitter.tscn" type="PackedScene" id=7]
+[ext_resource path="res://src/enemies/base_enemy/state/die.gd" type="Script" id=8]
+[ext_resource path="res://src/enemies/base_enemy/state/idle.gd" type="Script" id=9]
+[ext_resource path="res://src/objects/enemy_bullet.tscn" type="PackedScene" id=10]
+
+[sub_resource type="CapsuleShape2D" id=1]
+radius = 4.0
+height = 4.0
+
+[sub_resource type="AnimationNodeAnimation" id=25]
+animation = "die"
+
+[sub_resource type="AnimationNodeAnimation" id=10]
+animation = "fall_left"
+
+[sub_resource type="AnimationNodeAnimation" id=11]
+animation = "fall_right"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id=12]
+blend_point_0/node = SubResource( 10 )
+blend_point_0/pos = -1.0
+blend_point_1/node = SubResource( 11 )
+blend_point_1/pos = 1.0
+
+[sub_resource type="AnimationNodeAnimation" id=13]
+animation = "idle_left"
+
+[sub_resource type="AnimationNodeAnimation" id=14]
+animation = "idle_right"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id=15]
+blend_point_0/node = SubResource( 13 )
+blend_point_0/pos = -1.0
+blend_point_1/node = SubResource( 14 )
+blend_point_1/pos = 1.0
+
+[sub_resource type="AnimationNodeAnimation" id=16]
+animation = "walk_left"
+
+[sub_resource type="AnimationNodeAnimation" id=17]
+animation = "walk_right"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id=18]
+blend_point_0/node = SubResource( 16 )
+blend_point_0/pos = -1.0
+blend_point_1/node = SubResource( 17 )
+blend_point_1/pos = 1.0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=19]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=20]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=21]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=22]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=26]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=27]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=28]
+
+[sub_resource type="AnimationNodeStateMachine" id=23]
+states/die/node = SubResource( 25 )
+states/die/position = Vector2( 448, 169 )
+states/fall/node = SubResource( 12 )
+states/fall/position = Vector2( 285, 169 )
+states/idle/node = SubResource( 15 )
+states/idle/position = Vector2( 285, 78 )
+states/walk/node = SubResource( 18 )
+states/walk/position = Vector2( 448, 78 )
+transitions = [ "idle", "fall", SubResource( 19 ), "fall", "idle", SubResource( 20 ), "idle", "walk", SubResource( 21 ), "walk", "idle", SubResource( 22 ), "idle", "die", SubResource( 26 ), "walk", "die", SubResource( 27 ), "fall", "die", SubResource( 28 ) ]
+start_node = "idle"
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=24]
+
+[sub_resource type="Animation" id=2]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 8 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("GunPivot:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 180.0 ]
+}
+
+[sub_resource type="Animation" id=29]
+resource_name = "die"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 18, 19, 20, 21, 22, 23, 24, 25, 26, 27 ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 1 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "destroy"
+} ]
+}
+
+[sub_resource type="Animation" id=8]
+resource_name = "fall_left"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 11 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("GunPivot:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 180.0 ]
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "fall_right"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 1 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("GunPivot:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+
+[sub_resource type="Animation" id=7]
+resource_name = "idle_left"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 9 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("GunPivot:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 180.0 ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "idle_right"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 8 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("GunPivot:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+
+[sub_resource type="Animation" id=9]
+resource_name = "walk_left"
+length = 0.8
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 10, 11, 12, 13, 14, 15, 16, 17 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("GunPivot:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 180.0 ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "walk_right"
+length = 0.8
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("GunPivot:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 4.5, 6.25 )
+
+[node name="Enemy" type="KinematicBody2D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource( 6 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, -6 )
+shape = SubResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+modulate = Color( 1.2, 2.3, 1.2, 1 )
+position = Vector2( 0, -7 )
+texture = ExtResource( 2 )
+hframes = 28
+frame = 8
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource( 23 )
+anim_player = NodePath("../AnimationPlayer")
+active = true
+parameters/playback = SubResource( 24 )
+parameters/fall/blend_position = 1.0
+parameters/idle/blend_position = 1.0
+parameters/walk/blend_position = 1.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "RESET"
+anims/RESET = SubResource( 2 )
+anims/die = SubResource( 29 )
+anims/fall_left = SubResource( 8 )
+anims/fall_right = SubResource( 5 )
+anims/idle_left = SubResource( 7 )
+anims/idle_right = SubResource( 3 )
+anims/walk_left = SubResource( 9 )
+anims/walk_right = SubResource( 4 )
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource( 1 )
+initial_state = NodePath("Move/Walk")
+
+[node name="Move" type="Node" parent="StateMachine"]
+script = ExtResource( 3 )
+detection_range = 120.0
+
+[node name="Walk" type="Node" parent="StateMachine/Move"]
+script = ExtResource( 4 )
+
+[node name="Idle" type="Node" parent="StateMachine/Move"]
+script = ExtResource( 9 )
+
+[node name="Air" type="Node" parent="StateMachine/Move"]
+script = ExtResource( 5 )
+
+[node name="Die" type="Node" parent="StateMachine/Move"]
+script = ExtResource( 8 )
+
+[node name="GunPivot" type="Node2D" parent="."]
+position = Vector2( 0, -6 )
+rotation = 3.14159
+
+[node name="BulletEmitter" parent="GunPivot" instance=ExtResource( 7 )]
+position = Vector2( 8, 0 )
+bullet = ExtResource( 10 )
+fire_angle = 0.0
+fire_rays = 1
+fire_rate = 0.5
+damage = 10.0
+is_player = false
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 48
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+self_modulate = Color( 0.14902, 0.145098, 0.537255, 1 )
+position = Vector2( -0.5, -6.25 )
+shape = SubResource( 6 )
+
+[node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
+position = Vector2( 2.5, -7 )
+scale = Vector2( 4.55, 1 )
+
+[connection signal="area_entered" from="Hurtbox" to="." method="_on_hurtbox_area_entered"]
+[connection signal="screen_entered" from="VisibilityNotifier2D" to="." method="_on_screen_entered"]

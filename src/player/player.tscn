@@ -1,0 +1,440 @@
+[gd_scene load_steps=46 format=2]
+
+[ext_resource path="res://assets/player/player_spritesheet.png" type="Texture" id=1]
+[ext_resource path="res://src/main/state_machine/state_machine.gd" type="Script" id=2]
+[ext_resource path="res://src/player/state/move.gd" type="Script" id=3]
+[ext_resource path="res://src/player/state/idle.gd" type="Script" id=4]
+[ext_resource path="res://src/player/state/run.gd" type="Script" id=5]
+[ext_resource path="res://src/player/state/air.gd" type="Script" id=6]
+[ext_resource path="res://src/player/player.gd" type="Script" id=7]
+[ext_resource path="res://src/player/bullet_emitter.tscn" type="PackedScene" id=8]
+[ext_resource path="res://src/player/Dead.gd" type="Script" id=9]
+[ext_resource path="res://assets/sfx/pickup.wav" type="AudioStream" id=10]
+[ext_resource path="res://assets/sfx/die.wav" type="AudioStream" id=11]
+[ext_resource path="res://assets/sfx/hit.wav" type="AudioStream" id=12]
+
+[sub_resource type="CapsuleShape2D" id=25]
+radius = 4.5
+height = 5.0
+
+[sub_resource type="Animation" id=2]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 8 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("GunPivot:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 180.0 ]
+}
+
+[sub_resource type="Animation" id=26]
+resource_name = "die"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 18 ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "idle_left"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 9 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("GunPivot:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 180.0 ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "idle_right"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 8 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("GunPivot:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "jump_left"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 11 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("GunPivot:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 180.0 ]
+}
+
+[sub_resource type="Animation" id=6]
+resource_name = "jump_right"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 1 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("GunPivot:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+
+[sub_resource type="Animation" id=9]
+resource_name = "run_left"
+length = 0.8
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 10, 11, 12, 13, 14, 15, 16, 17 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("GunPivot:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 180.0 ]
+}
+
+[sub_resource type="Animation" id=10]
+resource_name = "run_right"
+length = 0.8
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("GunPivot:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ 0.0 ]
+}
+
+[sub_resource type="AnimationNodeAnimation" id=27]
+animation = "die"
+
+[sub_resource type="AnimationNodeAnimation" id=11]
+animation = "idle_left"
+
+[sub_resource type="AnimationNodeAnimation" id=12]
+animation = "idle_right"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id=13]
+blend_point_0/node = SubResource( 11 )
+blend_point_0/pos = -1.0
+blend_point_1/node = SubResource( 12 )
+blend_point_1/pos = 1.0
+
+[sub_resource type="AnimationNodeAnimation" id=14]
+animation = "jump_left"
+
+[sub_resource type="AnimationNodeAnimation" id=15]
+animation = "jump_right"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id=16]
+blend_point_0/node = SubResource( 14 )
+blend_point_0/pos = -1.0
+blend_point_1/node = SubResource( 15 )
+blend_point_1/pos = 1.0
+
+[sub_resource type="AnimationNodeAnimation" id=17]
+animation = "run_left"
+
+[sub_resource type="AnimationNodeAnimation" id=18]
+animation = "run_right"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id=19]
+blend_point_0/node = SubResource( 17 )
+blend_point_0/pos = -1.0
+blend_point_1/node = SubResource( 18 )
+blend_point_1/pos = 1.0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=20]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=21]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=22]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=23]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=28]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=29]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=30]
+
+[sub_resource type="AnimationNodeStateMachine" id=7]
+states/die/node = SubResource( 27 )
+states/die/position = Vector2( 634, 68 )
+states/idle/node = SubResource( 13 )
+states/idle/position = Vector2( 468, 164 )
+states/jump/node = SubResource( 16 )
+states/jump/position = Vector2( 468, 68 )
+states/run/node = SubResource( 19 )
+states/run/position = Vector2( 634, 164 )
+transitions = [ "idle", "jump", SubResource( 20 ), "idle", "run", SubResource( 21 ), "jump", "idle", SubResource( 22 ), "run", "idle", SubResource( 23 ), "jump", "die", SubResource( 28 ), "idle", "die", SubResource( 29 ), "run", "die", SubResource( 30 ) ]
+start_node = "idle"
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=8]
+
+[sub_resource type="Shader" id=32]
+code = "shader_type canvas_item;
+
+uniform bool active = true;
+
+void fragment() {
+	vec4 prev_color = texture(TEXTURE, UV);
+	vec4 white_color = vec4(1.0, 1.0, 1.0, prev_color.a);
+	vec4 new_color = prev_color;
+	if (active) { new_color = white_color; }
+	COLOR = new_color;
+}"
+
+[sub_resource type="ShaderMaterial" id=33]
+shader = SubResource( 32 )
+shader_param/active = false
+
+[sub_resource type="RectangleShape2D" id=31]
+extents = Vector2( 4.5, 6.25 )
+
+[sub_resource type="Animation" id=35]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:material:shader_param/active")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ false ]
+}
+
+[sub_resource type="Animation" id=34]
+resource_name = "blink"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:material:shader_param/active")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ true, false, true, false ]
+}
+
+[node name="Player" type="KinematicBody2D"]
+collision_mask = 2
+script = ExtResource( 7 )
+pick_up_sound = ExtResource( 10 )
+die_sound = ExtResource( 11 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( -0.5, -7 )
+shape = SubResource( 25 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "idle_right"
+anims/RESET = SubResource( 2 )
+anims/die = SubResource( 26 )
+anims/idle_left = SubResource( 3 )
+anims/idle_right = SubResource( 4 )
+anims/jump_left = SubResource( 5 )
+anims/jump_right = SubResource( 6 )
+anims/run_left = SubResource( 9 )
+anims/run_right = SubResource( 10 )
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource( 7 )
+anim_player = NodePath("../AnimationPlayer")
+active = true
+parameters/playback = SubResource( 8 )
+parameters/idle/blend_position = 1.0
+parameters/jump/blend_position = 1.0
+parameters/run/blend_position = 1.0
+
+[node name="GunPivot" type="Node2D" parent="."]
+position = Vector2( 0, -5 )
+rotation = 3.14159
+scale = Vector2( 1e-05, 1 )
+
+[node name="BulletEmitter" parent="GunPivot" instance=ExtResource( 8 )]
+position = Vector2( 802816, 0 )
+
+[node name="StateMachine" type="Node" parent="."]
+script = ExtResource( 2 )
+initial_state = NodePath("Move/Idle")
+
+[node name="Dead" type="Node" parent="StateMachine"]
+script = ExtResource( 9 )
+
+[node name="Move" type="Node" parent="StateMachine"]
+script = ExtResource( 3 )
+max_speed_default = Vector2( 140, 400 )
+acceleration_default = Vector2( 1000, 1600 )
+jump_force = 450.0
+
+[node name="Idle" type="Node" parent="StateMachine/Move"]
+script = ExtResource( 4 )
+
+[node name="Run" type="Node" parent="StateMachine/Move"]
+script = ExtResource( 5 )
+
+[node name="Air" type="Node" parent="StateMachine/Move"]
+script = ExtResource( 6 )
+
+[node name="Sprite" type="Sprite" parent="."]
+modulate = Color( 1.75, 1.75, 1.5, 1 )
+material = SubResource( 33 )
+position = Vector2( 0, -7 )
+texture = ExtResource( 1 )
+hframes = 19
+frame = 8
+
+[node name="DeathTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 12 )
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 144
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+self_modulate = Color( 0.14902, 0.145098, 0.537255, 1 )
+position = Vector2( -0.5, -6.25 )
+shape = SubResource( 31 )
+
+[node name="BlinkAnimationPlayer" type="AnimationPlayer" parent="."]
+anims/RESET = SubResource( 35 )
+anims/blink = SubResource( 34 )
+
+[connection signal="timeout" from="DeathTimer" to="." method="_on_death_timer_timeout"]
+[connection signal="area_entered" from="Hurtbox" to="." method="_on_hurtbox_area_entered"]
